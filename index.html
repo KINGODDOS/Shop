@@ -1,56 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Route System</title>
+    <title>JS রাউটিং সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="app">
-        <!-- Login Page Section -->
+        <!-- ১. লগইন পেজ -->
         <section id="login-page" class="page">
             <div class="card">
-                <h2>Login</h2>
+                <h2>লগইন করুন</h2>
                 <form id="login-form">
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Password" required>
-                    <button type="submit">Login</button>
+                    <input type="email" placeholder="আপনার ইমেইল" required>
+                    <input type="password" placeholder="পাসওয়ার্ড" required>
+                    <button type="submit">লগইন</button>
                 </form>
-                <p>Don't have an account? <a href="#signup">Sign Up</a></p>
+                <p>অ্যাকাউন্ট নেই? <a href="#signup">এখানে সাইন আপ করুন</a></p>
             </div>
         </section>
 
-        <!-- Sign Up Page Section -->
+        <!-- ২. সাইন আপ পেজ -->
         <section id="signup-page" class="page">
             <div class="card">
-                <h2>Sign Up</h2>
+                <h2>নতুন অ্যাকাউন্ট</h2>
                 <form id="signup-form">
-                    <input type="text" placeholder="Full Name" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Password" required>
-                    <button type="submit">Create Account</button>
+                    <input type="text" placeholder="আপনার পুরো নাম" required>
+                    <input type="email" placeholder="আপনার ইমেইল" required>
+                    <input type="password" placeholder="নতুন পাসওয়ার্ড" required>
+                    <button type="submit">অ্যাকাউন্ট তৈরি করুন</button>
                 </form>
-                <p>Already have an account? <a href="#login">Login</a></p>
+                <p>ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="#login">এখানে লগইন করুন</a></p>
             </div>
         </section>
 
-        <!-- Main Application Page Section -->
+        <!-- ৩. মূল অ্যাপ্লিকেশন পেজ -->
         <section id="main-page" class="page">
-            <div class="card">
+            <div class="card main-app-card">
                 <header>
-                    <h2>Main Application</h2>
-                    <button id="logout-btn">Logout</button>
+                    <h2>মূল অ্যাপ্লিকেশন</h2>
+                    <button id="logout-btn">লগআউট</button>
                 </header>
                 <div class="content">
-                    <p>Welcome to the main application! This is your dashboard.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.</p>
+                    <p>স্বাগতম! এটি আপনার ড্যাশবোর্ড।</p>
+                    <p>আপনি সফলভাবে লগইন করেছেন এবং এখন মূল অ্যাপ্লিকেশন দেখতে পাচ্ছেন।</p>
                 </div>
             </div>
         </section>
     </div>
 
-    <script src="App.js"></script>
+    <!-- জাভাস্ক্রিপ্ট ফাইল লিঙ্ক -->
+    <script src="app.js"></script>
 </body>
 </html>
