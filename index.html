@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MNLF 2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <style>
+:root {
+    --form-bg: #1f2937; --tab-header-bg: #111827; --tab-inactive-text: #9ca3af; --tab-active-text: #3b82f6;
+    --input-border-color: #4b5563; --input-bg-color: #374151; --text-color-primary: #f9fafb; --text-color-secondary: #d1d5db;
+    --icon-color: #9ca3af; --link-color: #3b82f6; --success-color: #22c55e; --danger-text: #f87171;
+    --btn-yellow-bg: #facc15; --btn-orange-bg: #f97316; --text-color-placeholder: #9ca3af;
+}
+body { margin: 0; font-family: 'Poppins', 'Noto Sans Bengali', 'Hind Siliguri', sans-serif; background-color: #111827; background-image: radial-gradient(ellipse at top, #1e3a8a, #111827); background-attachment: fixed; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-color-primary); overflow-x: hidden; }
+.app-container { background-color: var(--form-bg); width: 100%; max-width: 420px; height: 95vh; max-height: 850px; border-radius: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+
+/* Page System */
+.page { display: none; flex-direction: column; flex-grow: 1; overflow-y: hidden; }
+.page.active { display: flex; }
+.main-content { padding: 0; overflow-y: auto; flex-grow: 1; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.main-content::-webkit-scrollbar { display: none; }
+.page.active .main-content.padded { padding: 20px; }
+
+/* Home Page Styles */
+.image-slider-container { width: 100%; border-radius: 15px; overflow: hidden; margin: 20px 20px 0; width: calc(100% - 40px); }
+.slider-track { display: flex; animation: slider-scroll 25s linear infinite; }
+.slider-track img { width: 100%; flex-shrink: 0; object-fit: cover; }
+@keyframes slider-scroll { 0% { transform: translateX(0%); } 100% { transform: translateX(-66.66%); } }
+.home-dashboard, .intern-status-card { display: none; background-color: var(--input-bg-color); border-radius: 15px; padding: 20px; margin: 0 20px 20px;}
+.vip-status-header { text-align: center; border-bottom: 1px solid var(--input-border-color); padding-bottom: 15px; margin-bottom: 0; }
+.vip-main-line { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
+.vip-main-line h2 { margin: 0; font-size: 1.8em; color: var(--link-color); }
+#vip-countdown { font-size: 1.1em; font-weight: bold; }
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.dashboard-item { background-color: var(--form-bg); padding: 15px; border-radius: 10px; text-align: center; }
+.dashboard-item p { margin: 0 0 5px; font-size: 0.8em; color: var(--text-color-secondary); }
+.dashboard-item h3 { margin: 0; font-size: 1.1em; word-wrap: break-word; }
+.intern-status-card { text-align: center; border: 2px dashed var(--link-color); padding: 20px; margin: 20px; }
+.intern-status-card h2 { margin-top: 0; color: var(--link-color);}
+
+/* Membership Earning Styles */
+.membership-earning-container { background-color: var(--input-bg-color); border-radius: 15px; padding: 15px; margin: 20px; }
+.membership-earning-container h2 { text-align: center; color: var(--text-color-primary); font-size: 1.2em; margin: 0 0 15px 0; }
+.earning-list-wrapper { height: 150px; overflow: hidden; }
+.earning-list { display: flex; flex-direction: column; gap: 8px; animation: vertical-scroll 20s linear infinite; }
+.earning-list:hover { animation-play-state: paused; }
+@keyframes vertical-scroll { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+.earning-item { display: flex; align-items: center; background-color: var(--form-bg); padding: 6px 10px; border-radius: 20px; }
+.earning-item .avatar img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; }
+.earning-item .details { flex-grow: 1; }
+.earning-item .details .name { font-weight: bold; font-size: 0.8em; color: var(--text-color-primary); }
+.earning-item .details .label { font-size: 0.7em; color: var(--text-color-secondary); }
+.earning-item .amount { font-weight: bold; color: var(--link-color); font-size: 0.85em; margin-left: 10px; white-space: nowrap; }
+
+/* Home Action Buttons (MODIFIED location) */
+.home-actions { display: flex; justify-content: space-around; padding: 20px 0; gap: 15px; }
+.action-btn { flex: 1; display: flex; flex-direction: column; align-items: center; background-color: var(--form-bg); border: none; border-radius: 15px; padding: 15px 10px; color: var(--text-color-primary); cursor: pointer; transition: background-color 0.2s; font-size: 0.8em; text-align: center;}
+.action-btn:hover { background-color: #4b5563; }
+.action-btn i { font-size: 1.6em; margin-bottom: 8px; color: var(--link-color); }
+.action-btn span { font-size: 0.9em; }
+
+/* Fiture Page Styles */
+#fiture-page .main-content { background-color: var(--tab-header-bg); }
+.fiture-status-card { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background-color: var(--input-bg-color); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+.status-item { text-align: center; }
+.status-item p { margin: 0 0 5px; font-size: 0.8em; color: var(--text-color-secondary); }
+.status-item h3 { margin: 0; font-size: 1.2em; color: var(--link-color); font-weight: 600; }
+.fiture-progress-card { display: flex; justify-content: space-around; background-color: var(--input-bg-color); padding: 12px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
+.progress-item { display: flex; flex-direction: column; }
+.progress-item span { font-size: 0.75em; color: var(--text-color-secondary); margin-bottom: 4px; }
+.progress-item strong { font-size: 0.9em; color: var(--text-color-primary); }
+.task-list-container { display: flex; flex-direction: column; gap: 12px; }
+.task-item { background-color: var(--input-bg-color); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; }
+.task-icon { font-size: 2em; color: var(--link-color); width: 40px; text-align: center; flex-shrink: 0; }
+.task-details { flex-grow: 1; }
+.task-title { margin: 0 0 8px; font-size: 1em; font-weight: 600; color: var(--text-color-primary); }
+.task-meta { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.75em; color: var(--text-color-secondary); }
+.task-meta span { display: flex; align-items: center; gap: 5px; }
+.task-action .go-btn { background-color: var(--link-color); color: white; border: none; border-radius: 20px; padding: 8px 20px; font-weight: bold; cursor: pointer; transition: background-color 0.2s, color 0.2s; white-space: nowrap; }
+.task-action .go-btn:hover { filter: brightness(1.2); }
+.task-action .go-btn.completed { background-color: var(--success-color); cursor: not-allowed; }
+.task-action .go-btn:disabled { filter: grayscale(50%); opacity: 0.7; }
+
+/* VIP Page Styles */
+#vip-page .main-content { background-color: var(--tab-header-bg); }
+.vip-list-container { display: flex; flex-direction: column; gap: 15px; }
+.vip-card { background-color: var(--input-bg-color); border-radius: 15px; overflow: hidden; border: 2px solid transparent; transition: border-color 0.3s; }
+.vip-card.active { border-color: var(--btn-yellow-bg); }
+.vip-card-header { background: linear-gradient(135deg, #4f46e5, #3b82f6); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; color: white; }
+.vip-card-header h3 { margin: 0; font-size: 1.2em; }
+.vip-card-header .price { font-size: 1.1em; font-weight: bold; }
+.vip-card-body { padding: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 12px; }
+.vip-stat { text-align: center; background-color: var(--form-bg); padding: 10px; border-radius: 8px; }
+.vip-stat p { margin: 0 0 4px; font-size: 0.75em; color: var(--text-color-secondary); }
+.vip-stat strong { font-size: 0.9em; color: var(--text-color-primary); }
+.vip-stat .icon-success { color: var(--success-color); }
+.vip-stat .icon-danger { color: var(--danger-text); }
+.vip-card-footer { padding: 0 15px 15px; }
+.buy-btn { width: 100%; background-color: var(--link-color); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 1em; cursor: pointer; transition: background-color 0.2s; }
+.buy-btn:hover { filter: brightness(1.2); }
+.buy-btn.current { background-color: var(--success-color); cursor: default; }
+
+/* Profile Page Styles */
+.profile-header { background: linear-gradient(135deg, #4f46e5, #3b82f6); padding: 15px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; display: flex; align-items: center; gap: 12px; color: white; }
+.profile-pic { width: 50px; height: 50px; border-radius: 50%; background-color: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 1.8em; flex-shrink: 0; }
+.profile-info { flex-grow: 1; }
+.profile-info h3 { margin: 0 0 4px; font-size: 1.1em; }
+.profile-info p { margin: 0; font-size: 0.8em; opacity: 0.9; }
+.profile-info .invite-code { color: var(--btn-yellow-bg); font-weight: bold; }
+.profile-vip-badge { background-color: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; }
+.profile-body { padding: 15px; }
+.balance-card { background-color: var(--input-bg-color); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 15px; }
+.balance-card p { margin: 0 0 5px; font-size: 0.9em; color: var(--text-color-secondary); }
+.balance-card .amount { font-size: 2.2em; font-weight: bold; color: var(--btn-orange-bg); margin-bottom: 15px; }
+.action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+.action-buttons .btn { padding: 10px; border-radius: 8px; border: none; font-weight: bold; font-size: 0.9em; display: flex; justify-content: center; align-items: center; gap: 6px; cursor: pointer; }
+.btn.deposit { background-color: var(--btn-yellow-bg); color: var(--form-bg); }
+.btn.withdraw { background-color: var(--btn-orange-bg); color: white; }
+.schedule-info { text-align: left; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--input-border-color); padding-top: 12px; font-size: 0.8em; }
+.schedule-info div { display: flex; align-items: center; gap: 8px; color: var(--text-color-secondary); }
+.schedule-info div i { color: var(--icon-color); width: 18px; text-align: center; }
+.profile-options-list { background-color: var(--input-bg-color); border-radius: 12px; padding: 5px 0; }
+.option-item { display: flex; align-items: center; padding: 12px 15px; text-decoration: none; color: var(--text-color-primary); border-bottom: 1px solid var(--input-border-color); cursor: pointer; }
+.option-item:last-child { border-bottom: none; }
+.option-item .icon { font-size: 1.1em; color: var(--link-color); width: 25px; text-align: center; margin-right: 12px; }
+.option-item .text { flex-grow: 1; font-size: 0.9em; }
+.option-item .chevron { font-size: 1em; color: var(--text-color-secondary); }
+
+/* Refer Page Styles */
+#refer-page .main-content { background-color: var(--form-bg); color: var(--text-color-primary); }
+#refer-page * { box-sizing: border-box; }
+#refer-page .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 10px; }
+#refer-page .profile-header { background: var(--input-bg-color); border-radius: 12px; padding: 15px; margin-bottom: 5px; box-shadow: none; display: flex; align-items: center; justify-content: center; }
+#refer-page .qr-code img { width: 80px; height: 80px; border-radius: 8px; background-color: white; padding: 4px; }
+#refer-page .qr-note { text-align: center; font-size: 0.8em; color: var(--text-color-secondary); padding: 5px 15px 15px; }
+#refer-page .referral-card { background: var(--input-bg-color); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: none; }
+#refer-page .referral-item { display: flex; align-items: center; background-color: var(--form-bg); border-radius: 8px; padding: 8px 10px; }
+#refer-page .referral-item:first-child { margin-bottom: 10px; }
+#refer-page .referral-item span, #refer-page .referral-item input { font-size: 0.9rem; font-weight: 600; color: var(--text-color-primary); flex-grow: 1; }
+#refer-page .referral-item input { border: none; background: transparent; outline: none; padding: 0; }
+#refer-page .copy-btn-small { background-color: var(--link-color); color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-left: 10px; transition: background-color 0.2s; }
+#refer-page .copy-btn-small:hover { filter: brightness(1.2); }
+#refer-page .copy-btn-small.copied { background-color: var(--success-color); }
+#refer-page .content-wrapper { background: var(--input-bg-color); border-radius: 12px; box-shadow: none; overflow: hidden; }
+#refer-page .tab-bar-wrapper { padding: 5px; background-color: var(--tab-header-bg); margin: 15px; border-radius: 10px; }
+#refer-page .tab-bar { display: flex; }
+#refer-page .tab-button { flex: 1; padding: 10px; border: none; background-color: transparent; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--tab-inactive-text); border-radius: 8px; transition: all 0.3s ease; }
+#refer-page .tab-button.active { background-color: var(--link-color); color: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+#refer-page .tab-content { padding: 0 15px 15px 15px; }
+#refer-page .content-section { display: none; }
+#refer-page .content-section.active { display: block; }
+#refer-page .card { border: 1px solid var(--input-border-color); border-radius: 12px; margin-bottom: 12px; overflow: hidden; background: transparent; }
+#refer-page .accordion-button { background-color: transparent; color: var(--text-color-primary); cursor: pointer; padding: 12px 15px; width: 100%; border: none; text-align: left; outline: none; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+#refer-page .accordion-button::after { content: '+'; font-size: 1.3rem; color: var(--link-color); transition: transform 0.3s; }
+#refer-page .accordion-button.active::after { transform: rotate(45deg); }
+#refer-page .panel { background-color: transparent; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+#refer-page .panel-container { overflow-x: auto; padding: 10px; }
+#refer-page .commission-table, #refer-page .team-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+#refer-page .commission-table th, #refer-page .commission-table td, #refer-page .team-table th, #refer-page .team-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--input-border-color); }
+#refer-page .commission-table thead th, #refer-page .team-table thead th { background-color: var(--form-bg); font-weight: 600; font-size: 12px; text-transform: uppercase; color: var(--text-color-secondary); }
+#refer-page .text-right { text-align: right; } #refer-page .text-center { text-align: center; }
+#refer-page .reward-amount { font-weight: 600; color: var(--danger-text); }
+#refer-page .team-summary-card { display: flex; justify-content: space-around; text-align: center; margin-bottom: 15px; padding: 10px; background-color: var(--form-bg); border-radius: 8px; }
+#refer-page .summary-item { flex: 1; }
+#refer-page .summary-item .value { font-size: 1.6rem; font-weight: 700; color: var(--link-color); }
+#refer-page .summary-item .label { font-size: 0.8rem; color: var(--text-color-secondary); }
+#refer-page .sub-tab-bar { display: flex; margin-bottom: 10px; border-bottom: 1px solid var(--input-border-color); }
+#refer-page .sub-tab-button { flex: 1; padding: 10px; border: none; background: transparent; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-color-secondary); border-bottom: 2px solid transparent; }
+#refer-page .sub-tab-button.active { color: var(--link-color); border-color: var(--link-color); }
+#refer-page .sub-content-section { display: none; }
+#refer-page .sub-content-section.active { display: block; }
+#refer-page .team-table-container { max-height: 280px; overflow-y: auto; }
+
+/* === Customer Service Overlay Styles START === */
+#customer-service-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1500; display: flex; flex-direction: column; background-color: var(--tab-header-bg); transform: translateY(100%); transition: transform 0.35s ease-in-out; visibility: hidden; }
+#customer-service-overlay.visible { transform: translateY(0); visibility: visible; }
+.cs-chat-header { background: linear-gradient(135deg, #4f46e5, #3b82f6); color: white; padding: 10px 15px; display: flex; align-items: center; box-shadow: 0 3px 6px rgba(0,0,0,0.1); z-index: 10; flex-shrink: 0;}
+.cs-back-btn { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; padding: 5px 10px 5px 0; }
+.cs-header-title { font-size: 1.2em; font-weight: 600; text-align: center; flex-grow: 1; margin-right: 30px;}
+.cs-status-bar { font-size: 0.8em; color: var(--text-color-secondary); text-align: center; padding: 8px 15px; background-color: var(--input-bg-color); border-bottom: 1px solid var(--input-border-color); line-height: 1.4; flex-shrink: 0; }
+.cs-status-bar .status-text { font-weight: 500; }
+.cs-status-bar .status-online { color: var(--success-color); }
+.cs-status-bar .status-offline { color: var(--danger-text); }
+.cs-status-bar .countdown-timer { margin-top: 4px; display: block; font-size: 0.95em; }
+.cs-chat-container { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+.cs-chat-messages { flex-grow: 1; padding: 20px 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.cs-chat-messages .message { max-width: 80%; padding: 10px 15px; border-radius: 18px; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); opacity: 0; transform: translateY(10px); animation: csMessageFadeIn 0.3s ease-out forwards; }
+@keyframes csMessageFadeIn { to { opacity: 1; transform: translateY(0); } }
+.cs-chat-messages .message.user { background: var(--link-color); color: white; border-bottom-right-radius: 6px; align-self: flex-end; margin-left: auto; }
+.cs-chat-messages .message.support { background-color: var(--form-bg); color: var(--text-color-secondary); border-bottom-left-radius: 6px; align-self: flex-start; margin-right: auto; border: 1px solid var(--input-border-color); }
+.cs-chat-messages .message.support::before { content: "Bot:"; font-weight: 600; font-size: 0.8em; color: var(--link-color); display: block; margin-bottom: 3px; }
+.cs-chat-messages .message.admin-reply { background-color: var(--form-bg); color: var(--text-color-primary); border: 1px solid var(--link-color); border-bottom-left-radius: 6px; align-self: flex-start; margin-right: auto; }
+.cs-chat-messages .message.admin-reply::before { content: "Support Agent:"; font-weight: bold; font-size: 0.85em; color: var(--link-color); display: block; margin-bottom: 4px; }
+.cs-chat-messages .message strong { color: var(--btn-yellow-bg); }
+.cs-chat-messages .message ul, .cs-chat-messages .message ol { padding-left: 20px; margin-top: 8px; margin-bottom: 5px;}
+.cs-chat-messages .message li { margin-bottom: 4px; }
+.cs-chat-messages .message i { font-size: 0.9em; opacity: 0.8; }
+.cs-input-area { display: flex; align-items: center; padding: 10px; border-top: 1px solid var(--input-border-color); background-color: var(--tab-header-bg); flex-shrink: 0; }
+.cs-input { flex-grow: 1; padding: 10px 15px; border: 1px solid var(--input-border-color); background-color: var(--input-bg-color); border-radius: 20px; margin-right: 10px; font-size: 1em; outline: none; color: var(--text-color-primary); transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.cs-input:focus { border-color: var(--link-color); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+.cs-input:disabled { background-color: var(--form-bg); cursor: not-allowed; }
+.cs-send-btn { padding: 10px 15px; background: var(--link-color); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; transition: background 0.3s ease, transform 0.1s ease; }
+.cs-send-btn:hover:not(:disabled) { filter: brightness(1.2); }
+.cs-send-btn:active:not(:disabled) { transform: scale(0.98); }
+.cs-send-btn:disabled { background: var(--input-border-color); opacity: 0.7; cursor: not-allowed; }
+/* === Customer Service Overlay Styles END === */
+
+/* Bottom Nav */
+.bottom-nav { display: flex; background-color: var(--tab-header-bg); padding: 10px 0; border-top: 1px solid var(--input-border-color); flex-shrink: 0; transition: visibility 0.35s; }
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--tab-inactive-text); font-size: 0.8em; padding: 5px 0; cursor: pointer; }
+.nav-item i { font-size: 1.6em; margin-bottom: 4px; }
+.nav-item.active { color: var(--tab-active-text); }
+
+/* Modal Dialog Styles */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background-color: var(--input-bg-color); padding: 20px; border-radius: 15px; width: 80%; max-width: 350px; position: relative; box-shadow: 0 5px 25px rgba(0,0,0,0.3); text-align: center; }
+.modal-close { position: absolute; top: 5px; right: 15px; font-size: 2em; font-weight: bold; color: var(--text-color-secondary); background: none; border: none; cursor: pointer; }
+.modal-title { margin-top: 0; margin-bottom: 15px; color: var(--text-color-primary); }
+.modal-body { font-size: 0.9em; color: var(--text-color-secondary); line-height: 1.6; }
+.modal-body strong { color: var(--btn-yellow-bg); }
+
+/* Task View Overlay */
+.task-view-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--form-bg); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+.task-view-header { width: 100%; padding: 10px 15px; background-color: var(--tab-header-bg); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; flex-shrink: 0; }
+.task-view-header .header-btn { background: var(--input-bg-color); color: var(--text-color-secondary); border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8em; text-decoration: none; }
+#task-timer { font-size: 1.2em; font-weight: bold; color: var(--btn-yellow-bg); }
+#task-continue-btn { background: var(--success-color); color: white; font-weight: bold; display: none; }
+#task-iframe { width: 100%; flex-grow: 1; border: none; }
+
+/* === Daily Login Modal Styles START (Theme-Updated) === */
+.rewards-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.65); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 10px; }
+.rewards-modal-content { background-color: var(--input-bg-color); color: var(--text-color-primary); padding: 20px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); width: 100%; max-width: 320px; text-align: center; position: relative; animation: zoomInCompact 0.3s ease-out; max-height: 90vh; overflow-y: auto; border: 1px solid var(--input-border-color); }
+@keyframes zoomInCompact { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.rewards-modal-close-button { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.8em; color: var(--text-color-secondary); cursor: pointer; line-height: 1; }
+.rewards-modal-close-button:hover { color: var(--text-color-primary); }
+.rewards-modal-content h1 { color: var(--text-color-primary); margin-top: 0; margin-bottom: 8px; font-size: 1.2em; }
+.rewards-modal-content h2 { color: var(--link-color); margin-bottom: 12px; font-size: 0.9em; font-weight: 500; }
+#countdownTimerModal { font-size: 0.85em; font-weight: 600; margin-bottom: 15px; background-color: rgba(248, 113, 113, 0.1); color: var(--danger-text); padding: 6px 0; border-radius: 6px; border: 1px solid var(--danger-text); }
+#countdownTimerModal.ready { color: var(--success-color); background-color: rgba(34, 197, 94, 0.1); border-color: var(--success-color); }
+.days-grid-modal { margin-bottom: 15px; }
+.days-row { display: grid; gap: 8px; margin-bottom: 8px; }
+#daysRow1Modal { grid-template-columns: repeat(3, 1fr); }
+#daysRow2Modal { grid-template-columns: repeat(4, 1fr); }
+.days-row:last-child { margin-bottom: 0; }
+.day-card { background-color: var(--form-bg); border: 1px solid var(--input-border-color); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: transform 0.15s ease, border-color 0.2s ease; min-height: 95px; }
+.day-card:hover:not(.locked):not(.claimed) { transform: translateY(-2px); }
+.day-card .day-number { font-size: 0.75em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 4px; }
+.day-card .reward-amount { font-size: 1.1em; font-weight: 700; color: var(--success-color); margin-bottom: 6px; }
+.day-card .reward-amount::before { content: "৳"; margin-right: 2px; font-weight: 500; }
+.day-card button { background-color: var(--link-color); color: white; border: none; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 0.7em; font-weight: 600; width: 100%; margin-top: auto; transition: background-color 0.2s; }
+.day-card button:disabled { background-color: var(--input-border-color); opacity: 0.7; }
+.day-card.claimed { background-color: rgba(34, 197, 94, 0.15); border-color: var(--success-color); }
+.day-card.claimed button { background-color: var(--success-color); }
+.day-card.claimed button::before { content: "✓ "; }
+.day-card.active { border-color: var(--link-color); }
+.day-card.active button { background-color: var(--btn-orange-bg); }
+.day-card.locked { opacity: 0.6; background-color: var(--tab-header-bg); }
+.day-card.locked button { background-color: var(--input-border-color); }
+.total-rewards-display-modal { margin-top: 15px; font-size: 0.85em; color: var(--text-color-secondary); }
+.total-rewards-display-modal span { color: var(--success-color); font-weight: 700; }
+.total-rewards-display-modal span::before { content: "৳"; margin-right: 1px;}
+.status-message-modal { margin-top: 10px; padding: 8px; border-radius: 6px; font-size: 0.8em; border: 1px solid transparent; }
+.status-message-modal.success { color: #d1fae5; background-color: rgba(34, 197, 94, 0.2); border-color: var(--success-color);}
+.status-message-modal.info { color: #dbeafe; background-color: rgba(59, 130, 246, 0.2); border-color: var(--link-color);}
+.status-message-modal.error { color: #fee2e2; background-color: rgba(248, 113, 113, 0.2); border-color: var(--danger-text);}
+
+/* === LOGIN MODAL FROM Login.html START === */
+.login-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: none; /* Initially hidden */
+    justify-content: center; align-items: center; z-index: 9999;
+}
+.login-modal-overlay .form-container {
+    background-color: var(--form-bg); width: 90%; max-width: 360px;
+    border-radius: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    position: relative; overflow: hidden; margin: 20px;
+    animation: zoomInCompact 0.3s ease-out;
+}
+.login-modal-overlay .tab-header { display: flex; background-color: var(--tab-header-bg); position: relative; }
+.login-modal-overlay .tab-item { flex: 1; padding: 15px 0; text-align: center; font-size: 1em; font-weight: bold; cursor: pointer; color: var(--tab-inactive-text); transition: color 0.3s ease; position: relative; z-index: 2; }
+.login-modal-overlay .tab-header::before { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 100%; background-color: var(--form-bg); z-index: 1; transition: transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86); border-top-left-radius: 20px; border-top-right-radius: 20px; }
+.login-modal-overlay .tab-header.register-active::before { transform: translateX(100%); }
+.login-modal-overlay .tab-item.active { color: var(--tab-active-text); }
+.login-modal-overlay .form-content { padding: 25px 20px 15px 20px; }
+.login-modal-overlay .form-section { display: none; }
+.login-modal-overlay .form-section.active { display: block; }
+.login-modal-overlay .input-group { display: flex; align-items: center; background-color: var(--input-bg-color); border: 1px solid var(--input-border-color); border-radius: 30px; margin-bottom: 18px; position: relative; padding: 0 5px 0 15px; }
+.login-modal-overlay .input-group i { color: var(--icon-color); font-size: 1.1em; width: 25px; text-align: center; }
+.login-modal-overlay .input-group input { border: none; outline: none; background: none; padding: 12px 5px; font-size: 0.95em; flex-grow: 1; color: var(--text-color-primary); }
+.login-modal-overlay .input-group input::placeholder { color: var(--text-color-placeholder); }
+.login-modal-overlay .input-group:focus-within { border-color: var(--link-color); box-shadow: 0 0 0 2px color-mix(in srgb, var(--link-color) 25%, transparent); }
+.login-modal-overlay .input-group .toggle-password { cursor: pointer; color: var(--icon-color); padding: 0 10px; }
+.login-modal-overlay .verification-code-container { display: flex; align-items: center; justify-content: space-between; }
+.login-modal-overlay .verification-code-container .input-group { flex-grow: 1; margin-right: 10px; }
+.login-modal-overlay .captcha-image { font-family: 'Courier New', Courier, monospace; font-size: 1.5em; font-weight: bold; letter-spacing: 4px; text-decoration: line-through; color: var(--link-color); transform: rotate(-5deg); user-select: none; padding-right: 10px; }
+.login-modal-overlay .remember-group { display: flex; align-items: center; margin-bottom: 20px; font-size: 0.85em; color: var(--text-color-secondary); }
+.login-modal-overlay .remember-group input[type="checkbox"] { margin-right: 8px; accent-color: var(--link-color); }
+.login-modal-overlay .btn { width: 100%; padding: 12px; border-radius: 30px; font-size: 1em; font-weight: bold; cursor: pointer; border: 1px solid transparent; margin-bottom: 12px; transition: all 0.3s ease; }
+.login-modal-overlay .btn-primary { background-color: var(--link-color); color: #ffffff; }
+.login-modal-overlay .btn-primary:hover { opacity: 0.9; }
+.login-modal-overlay .form-links { text-align: center; font-size: 0.8em; color: var(--text-color-secondary); margin-top: 5px; }
+.login-modal-overlay .form-links a { color: var(--link-color); text-decoration: none; font-weight: bold; }
+.login-modal-overlay .settings-container { padding: 10px 20px 20px; text-align: center; }
+.login-modal-overlay .btn-lang { padding: 8px 20px; font-size: 0.9em; background-color: var(--input-bg-color); color: var(--text-color-primary); border: 1px solid var(--input-border-color); border-radius: 20px; cursor: pointer; }
+.login-modal-close-button {
+    position: absolute; top: 0; right: 0; background: rgba(0,0,0,0.2); border: none;
+    font-size: 1.5em; color: white; cursor: pointer; line-height: 1; padding: 5px 10px;
+    border-radius: 0 20px 0 10px; z-index: 5;
+}
+/* === LOGIN MODAL FROM Login.html END === */
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- ======================= Home Page ======================= -->
+        <div id="home-page" class="page">
+             <div class="main-content">
+                <div class="image-slider-container"><div class="slider-track" id="image-slider-track"></div></div>
+                <div class="membership-earning-container"><h2>Membership Earning</h2><div class="earning-list-wrapper"><div class="earning-list" id="earning-list"></div></div></div>
+                <div class="home-dashboard" id="vip-dashboard">
+                     <div class="vip-status-header"><div class="vip-main-line"><h2 id="home-vip-position">...</h2></div><p id="home-vip-expires">...</p><div id="vip-countdown">--d --h --m --s</div></div>
+                    <div class="home-actions"><button class="action-btn" id="spin-btn"><i class="fas fa-dharmachakra"></i><span>Spin Wheel</span></button><button class="action-btn" id="notify-btn"><i class="fas fa-bell"></i><span>Notification</span></button><button class="action-btn" id="login-btn"><i class="fas fa-calendar-check"></i><span>Daily Login</span></button></div>
+                    <div class="dashboard-grid"><div class="dashboard-item"><p>Today Earning</p><h3 id="home-today-earning">...</h3></div><div class="dashboard-item"><p>Yesterday Earning</p><h3 id="home-yesterday-earning">...</h3></div><div class="dashboard-item"><p>Weekly Earning</p><h3 id="home-weekly-earning">...</h3></div><div class="dashboard-item"><p>Monthly Earning</p><h3 id="home-monthly-earning">...</h3></div><div class="dashboard-item"><p>Team Earning</p><h3 id="home-team-earning">...</h3></div><div class="dashboard-item"><p>Reffer Earning</p><h3 id="home-team-reffer">...</h3></div></div>
+                </div>
+                <div class="intern-status-card" id="intern-card"><h2>Intern Trial</h2><p>Upgrade to a VIP level to unlock full features!</p></div>
+            </div>
+        </div>
+        
+        <!-- ======================= Fiture Page ======================= -->
+        <div id="fiture-page" class="page">
+            <div class="main-content padded">
+                <div class="fiture-status-card">
+                    <div class="status-item"><p>Current Position</p><h3 id="fiture-current-position">Intern</h3></div>
+                    <div class="status-item"><p>Today Earn (BDT)</p><h3 id="fiture-today-earn">0.00 BDT</h3></div>
+                </div>
+                <div class="fiture-progress-card">
+                    <div class="progress-item"><span>Task Complete</span><strong id="fiture-task-complete">0 / 6</strong></div>
+                    <div class="progress-item"><span>Task Remain</span><strong id="fiture-task-remain">6</strong></div>
+                    <div class="progress-item"><span>Next Tasks In</span><strong id="task-countdown">00h 00m 00s</strong></div>
+                </div>
+                <div class="task-list-container" id="task-list-container-fiture">
+                    <div class="task-item"><div class="task-icon"><i class="fab fa-wikipedia-w"></i></div><div class="task-details"><h4 class="task-title">Wikipedia Visit</h4><div class="task-meta"><span><i class="fas fa-tag"></i>Staff</span><span><i class="fas fa-clock"></i> 30s</span><span><i class="fas fa-coins"></i>10 BDT</span></div></div><div class="task-action"><button class="go-btn" data-url="https://en.m.wikipedia.org/wiki/Main_Page" data-duration="30" data-reward="10">GO</button></div></div>
+                    <div class="task-item"><div class="task-icon"><i class="fab fa-youtube"></i></div><div class="task-details"><h4 class="task-title">Watch Video</h4><div class="task-meta"><span><i class="fas fa-tag"></i>Staff</span><span><i class="fas fa-clock"></i> 45s</span><span><i class="fas fa-coins"></i>10 BDT</span></div></div><div class="task-action"><button class="go-btn" data-url="https://m.youtube.com/watch?v=dQw4w9WgXcQ" data-duration="45" data-reward="10">GO</button></div></div>
+                    <div class="task-item"><div class="task-icon"><i class="fab fa-facebook-f"></i></div><div class="task-details"><h4 class="task-title">Like Page</h4><div class="task-meta"><span><i class="fas fa-tag"></i>Staff</span><span><i class="fas fa-clock"></i> 15s</span><span><i class="fas fa-coins"></i>10 BDT</span></div></div><div class="task-action"><button class="go-btn" data-url="https://m.facebook.com/" data-duration="15" data-reward="10">GO</button></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ======================= VIP Page ======================= -->
+        <div id="vip-page" class="page">
+            <div class="main-content padded">
+                <div class="vip-list-container" id="vip-list-container"></div>
+            </div>
+        </div>
+        
+        <!-- ======================= Refer Page ======================= -->
+        <div id="refer-page" class="page">
+             <div class="main-content">
+                <div class="container">
+                    <div class="profile-header"><div class="qr-code"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com/ref/X7K9P2" alt="QR Code"></div></div>
+                    <p class="qr-note">You Can Purchase VIP then show Your Invite code or refer code</p>
+                    <div class="referral-card"><div class="referral-item"><span id="referral-code">X7K9P2</span><button class="copy-btn-small" id="copy-code-btn">Copy</button></div><div class="referral-item"><input type="text" id="referral-link-input" value="https://example.com/ref/X7K9P2" readonly><button class="copy-btn-small" id="copy-link-btn">Copy</button></div></div>
+                    <main class="content-wrapper"><div class="tab-bar-wrapper"><div class="tab-bar"><button class="tab-button active" data-tab="invite-content">Invite</button><button class="tab-button" data-tab="team-content">Team</button></div></div><div class="tab-content"><div id="invite-content" class="content-section active"><div class="card"><button class="accordion-button">Position & Income</button><div class="panel"><div class="panel-container"><table class="commission-table"><thead><tr><th>Position</th><th class="text-right">Deposit</th><th class="text-right">
+                    
+                    Daily</th><th class="text-right">Monthly</th><th class="text-right">Yearly</th></tr></thead><tbody id="income-table-body"></tbody></table></div></div></div><div class="card"><button class="accordion-button">Team Earning Commission</button><div class="panel"><div class="panel-container"><table class="commission-table"><thead><tr><th>Position</th><th class="text-right">Income</th><th class="text-center">LVl A</th><th class="text-center">Lvl B</th><th class="text-right">Rwd(A)</th><th class="text-right">Rwd(B)</th></tr></thead><tbody id="team-commission-tbody"></tbody></table></div></div></div><div class="card"><button class="accordion-button">Team Invite & Reffer Commission</button><div class="panel"><div class="panel-container"><table class="commission-table"><thead><tr><th>Position</th><th class="text-center">Profit</th><th class="text-right">Lvl A</th><th class="text-right">Lvl B</th><th class="text-right">Price</th></tr></thead><tbody id="subordinate-commission-tbody"></tbody></table></div></div></div></div><div id="team-content" class="content-section"><div class="team-summary-card"><div class="summary-item"><div class="value">6</div><div class="label">Total</div></div><div class="summary-item"><div class="value">4</div><div class="label">Level A</div></div><div class="summary-item"><div class="value">2</div><div class="label">Level B</div></div></div><div class="sub-tab-bar"><button class="sub-tab-button active" data-subtab="level-a-content">Level A</button><button class="sub-tab-button" data-subtab="level-b-content">Level B</button></div><div id="level-a-content" class="sub-content-section active"><div class="team-table-container"><table class="team-table"><thead><tr><th>Position</th><th>Number</th><th class="text-right">Earning</th></tr></thead><tbody id="level-a-table-body"></tbody></table></div></div><div id="level-b-content" class="sub-content-section"><div class="team-table-container"><table class="team-table"><thead><tr><th>Position</th><th>Number</th><th class="text-right">Earning</th></tr></thead><tbody id="level-b-table-body"></tbody></table></div></div></div></div></main>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ======================= Profile Page ======================= -->
+        <div id="profile-page" class="page">
+            <div class="main-content">
+                <div class="profile-header"><div class="profile-pic"><i class="fas fa-user"></i></div><div class="profile-info"><h3 id="profile-phone">...</h3><p>Invite Code: <span id="profile-invite-code" class="invite-code">...</span></p></div><div class="profile-vip-badge"><i class="fas fa-crown"></i><span id="profile-vip-level">...</span></div></div>
+                <div class="profile-body">
+                    <div class="balance-card"><p>Available Balance (BDT)</p><h2 class="amount" id="profile-balance">...</h2><div class="schedule-info"><div><i class="fas fa-clock"></i> Deposit: 24/7 Hours, Any Time</div><div><i class="fas fa-hourglass-half"></i> Withdrawal: 10:00 AM - 4:00 PM</div><div><i class="fas fa-calendar-times"></i> Weekly Off: Saturday & Sunday</div></div></div>
+                    <div class="action-buttons"><button class="btn deposit"><i class="fas fa-piggy-bank"></i> Deposit</button><button class="btn withdraw"><i class="fas fa-receipt"></i> Withdraw</button></div>
+                    <div class="profile-options-list">
+                        <a href="Personal information.html" class="option-item">
+                            <span class="icon"><i class="fas fa-user-circle"></i></span>
+                            <span class="text">Personal Information</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a href="#" class="option-item">
+                            <span class="icon"><i class="fas fa-arrow-down"></i></span>
+                            <span class="text">Payment History</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a href="#" class="option-item">
+                            <span class="icon"><i class="fas fa-chart-line"></i></span>
+                            <span class="text">Earning History</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a id="help-btn" class="option-item">
+                            <span class="icon"><i class="fas fa-question-circle"></i></span>
+                            <span class="text">Help</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a id="lottary-btn" class="option-item">
+                            <span class="icon"><i class="fas fa-ticket-alt"></i></span>
+                            <span class="text">Lottary Ticket</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a id="investment-btn" class="option-item">
+                            <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
+                            <span class="text">Investment</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a id="telegram-btn" class="option-item">
+                            <span class="icon"><i class="fab fa-telegram-plane"></i></span>
+                            <span class="text">Join Telegram</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a id="about-btn" class="option-item">
+                            <span class="icon"><i class="fas fa-building"></i></span>
+                            <span class="text">About Us</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a href="#" id="customer-service-link" class="option-item">
+                            <span class="icon"><i class="fas fa-headset"></i></span>
+                            <span class="text">Customer Service</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                        <a id="logout-btn" class="option-item">
+                            <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                            <span class="text">Logout</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav"><a class="nav-item active" data-target="home-page"><i class="fas fa-home"></i><span>Home</span></a><a class="nav-item" data-target="fiture-page"><i class="fas fa-tasks"></i><span>Fiture</span></a><a class="nav-item" data-target="vip-page"><i class="fas fa-crown"></i><span>VIP</span></a><a class="nav-item" data-target="refer-page"><i class="fas fa-user-friends"></i><span>Refer</span></a><a class="nav-item" data-target="profile-page"><i class="fas fa-user-circle"></i><span>Profile</span></a></nav>
+        
+        <!-- ======================= Customer Service Overlay (NOT a page) ======================= -->
+        <div id="customer-service-overlay">
+            <div class="cs-chat-header">
+                <button class="cs-back-btn" id="cs-back-to-profile"><i class="fas fa-chevron-left"></i></button>
+                <span class="cs-header-title">MNLF Support</span>
+            </div>
+            <div class="cs-status-bar">
+                <span class="status-text" id="cs-serviceStatusText">Status: Checking...</span>
+                <span class="countdown-timer" id="cs-serviceCountdownTimer"></span>
+            </div>
+            <div class="cs-chat-container">
+                <div class="cs-chat-messages" id="cs-chatMessages"></div>
+                <div class="cs-input-area">
+                    <input type="text" id="cs-userInput" class="cs-input" placeholder="Ask about Moneylife..." disabled>
+                    <button id="cs-sendButton" class="cs-send-btn" disabled><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="dialog-modal"><div class="modal-content"><button class="modal-close" id="modal-close-btn">&times;</button><h3 class="modal-title" id="modal-title">Dialog Title</h3><div class="modal-body" id="modal-body"><p>This is the dialog content.</p></div></div></div>
+    <div class="task-view-overlay" id="task-view-overlay"><div class="task-view-header"><button class="header-btn" id="task-back-btn">Back</button><div id="task-timer-wrapper"><span id="task-timer">00s</span></div><button class="header-btn" id="task-continue-btn">Continue</button><a href="#" target="_blank" class="header-btn" id="open-browser-btn">Open Browser</a></div><iframe id="task-iframe" src="about:blank"></iframe></div>
+    
+    <!-- Daily Rewards Modal -->
+    <div class="rewards-modal-overlay" id="rewardsModalOverlay">
+        <div class="rewards-modal-content">
+            <button class="rewards-modal-close-button" id="closeRewardsModalBtn">&times;</button>
+            <h1>Daily Login Rewards</h1>
+            <h2 id="streakInfoModal">Login Streak: Day 0</h2>
+            <div id="countdownTimerModal">Next Reward: --:--:--</div>
+            <div class="days-grid-modal">
+                <div class="days-row" id="daysRow1Modal"></div>
+                <div class="days-row" id="daysRow2Modal"></div>
+            </div>
+            <p id="statusMessageModal" class="status-message-modal" style="display:none;"></p>
+            <div class="total-rewards-display-modal">
+                Your Total Rewards: <span id="totalRewardsModal">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ======================= Login Modal Overlay (NEW) ======================= -->
+    <div class="login-modal-overlay" id="loginModalOverlay">
+        <div class="form-container">
+            <button class="login-modal-close-button" id="loginModalCloseBtn">&times;</button>
+            <div class="tab-header" id="login-modal-tab-header">
+                <div class="tab-item active" id="login-modal-login-tab-btn">Login</div>
+                <div class="tab-item" id="login-modal-register-tab-btn">Register</div>
+            </div>
+            <div class="form-content">
+                <form id="login-modal-login-form" class="form-section active" onsubmit="event.preventDefault();">
+                    <div class="input-group">
+                        <i class="fas fa-mobile-alt"></i>
+                        <input type="text" value="+880 01959675377" readonly>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="password-input" value="123456" placeholder="Password">
+                        <i class="fas fa-eye-slash toggle-password"></i>
+                    </div>
+                    <div class="remember-group">
+                        <input type="checkbox" id="remember-login-modal" checked>
+                        <label for="remember-login-modal">Remember MobileNumber/Password</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login-modal-submit-btn">Login</button>
+                    <div class="form-links">
+                        <a href="#">Reset password >> Customer Service</a>
+                    </div>
+                </form>
+                <form id="login-modal-register-form" class="form-section" onsubmit="event.preventDefault();">
+                    <div class="input-group">
+                        <i class="fas fa-mobile-alt"></i>
+                        <input type="text" placeholder="+880 Phone Number">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="password-input" placeholder="Password">
+                        <i class="fas fa-eye-slash toggle-password"></i>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-gift"></i>
+                        <input type="text" placeholder="Invitation Code">
+                    </div>
+                    <div class="verification-code-container">
+                        <div class="input-group">
+                            <i class="fas fa-shield-alt"></i>
+                            <input type="text" placeholder="Verification Code">
+                        </div>
+                        <div class="captcha-image">6.5</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Global State ---
+    let isLoggedIn = false; // <<< IMPORTANT: User is NOT logged in by default
+    let actionAfterLogin = null; // To store the function that needs to run after login
+    let vipCountdownInterval = null, taskCountdownInterval = null, taskTimerInterval = null;
+    let currentTaskButton = null;
+    let totalTasks = 0;
+    let completedTasks = 0;
+    let csChatInitialized = false;
+
+    // --- Data Simulation ---
+    let userData = { vipPosition: "Staff", vipExpiresDays: 365, todayEarning: 0, yesterdayEarning: 0, weeklyEarning: 0, monthlyEarning: 0, teamEarning: 0, teamReffer: 0, phone: '01959675377', inviteCode: 'X7K9P2', balance: 31.00 };
+    const vipExpirationTimestamp = new Date().getTime() + (userData.vipExpiresDays * 24 * 60 * 60 * 1000);
+    const sliderImages = ["https://i.imgur.com/8BFM3a1.jpeg", "https://i.imgur.com/C5exgGe.jpeg", "https://i.imgur.com/k28V5C5.jpeg"];
+    const membershipEarnings = [ { avatar: 'https://i.pravatar.cc/150?img=11', phone: '****1190', amount: 6000 }, { avatar: 'https://i.pravatar.cc/150?img=33', phone: '****8125', amount: 2000 }, { avatar: 'https://i.pravatar.cc/150?img=14', phone: '****3572', amount: 5000 }, { avatar: 'https://i.pravatar.cc/150?img=68', phone: '****9431', amount: 10000 }, { avatar: 'https://i.pravatar.cc/150?img=5', phone: '****2245', amount: 1500 } ];
+
+    // --- Core Page Navigation ---
+    function navigateTo(pageId) { 
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active')); 
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active')); 
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) targetPage.classList.add('active');
+        const navItem = document.querySelector(`.nav-item[data-target="${pageId}"]`); 
+        if(navItem) navItem.classList.add('active'); 
+        if (isLoggedIn) {
+            if (pageId === 'home-page') updateHomePage(); 
+            if (pageId === 'profile-page') updateProfilePage(); 
+            if (pageId === 'fiture-page') initializeFiturePage(); 
+            if (pageId === 'vip-page') initializeVipPage();
+        } else {
+            // If not logged in, show basic view without user data
+            if (pageId === 'home-page') {
+                document.getElementById('vip-dashboard').style.display = 'none';
+                document.getElementById('intern-card').style.display = 'block';
+            }
+             if (pageId === 'profile-page') {
+                document.getElementById('profile-phone').innerText = 'Not Logged In';
+                document.getElementById('profile-invite-code').innerText = 'N/A';
+                document.getElementById('profile-vip-level').innerText = 'Guest';
+                document.getElementById('profile-balance').innerText = '0.00';
+             }
+        }
+    }
+    document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => navigateTo(item.dataset.target)));
+
+    // --- NEW LOGIN MODAL LOGIC ---
+    const loginModalOverlay = document.getElementById('loginModalOverlay');
+    const loginModalCloseBtn = document.getElementById('loginModalCloseBtn');
+    
+    function showLoginModal() {
+        loginModalOverlay.style.display = 'flex';
+    }
+    function hideLoginModal() {
+        loginModalOverlay.style.display = 'none';
+    }
+    function requireLogin(originalAction) {
+        if (isLoggedIn) {
+            originalAction(); // If already logged in, just do the action
+        } else {
+            actionAfterLogin = originalAction; // Store the action
+            showLoginModal(); // Show the login form
+        }
+    }
+    loginModalCloseBtn.addEventListener('click', hideLoginModal);
+    document.getElementById('login-modal-submit-btn').addEventListener('click', () => {
+        // Simulate a successful login
+        isLoggedIn = true;
+        hideLoginModal();
+        alert('Login Successful!');
+        
+        // Refresh current page view with logged-in data
+        const activePage = document.querySelector('.page.active').id;
+        navigateTo(activePage);
+
+        // If there was an action pending, execute it now
+        if (actionAfterLogin) {
+            actionAfterLogin();
+            actionAfterLogin = null; // Clear it after execution
+        }
+    });
+
+    // Login Modal Tab logic
+    const loginModalTabHeader = document.getElementById('login-modal-tab-header');
+    const loginModalLoginTabBtn = document.getElementById('login-modal-login-tab-btn');
+    const loginModalRegisterTabBtn = document.getElementById('login-modal-register-tab-btn');
+    const loginModalLoginForm = document.getElementById('login-modal-login-form');
+    const loginModalRegisterForm = document.getElementById('login-modal-register-form');
+    loginModalLoginTabBtn.addEventListener('click', () => {
+        loginModalTabHeader.classList.remove('register-active');
+        loginModalLoginTabBtn.classList.add('active');
+        loginModalRegisterTabBtn.classList.remove('active');
+        loginModalLoginForm.classList.add('active');
+        loginModalRegisterForm.classList.remove('active');
+    });
+    loginModalRegisterTabBtn.addEventListener('click', () => {
+        loginModalTabHeader.classList.add('register-active');
+        loginModalLoginTabBtn.classList.remove('active');
+        loginModalRegisterTabBtn.classList.add('active');
+        loginModalLoginForm.classList.remove('active');
+        loginModalRegisterForm.classList.add('active');
+    });
+    // Toggle password visibility for login modal
+    document.querySelectorAll('#loginModalOverlay .toggle-password').forEach(icon => {
+        icon.addEventListener('click', () => {
+            const passwordInput = icon.previousElementSibling;
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    });
+
+
+    // --- Generic Modal & Task Overlay Logic (Unchanged) ---
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const dialogModal = document.getElementById('dialog-modal');
+    function showModal(title, content) { document.getElementById('modal-title').textContent = title; document.getElementById('modal-body').innerHTML = content; dialogModal.style.display = 'flex'; }
+    function hideModal() { dialogModal.style.display = 'none'; }
+    modalCloseBtn.addEventListener('click', hideModal);
+    dialogModal.addEventListener('click', (event) => { if (event.target === dialogModal) { hideModal(); } });
+
+    const taskOverlay = document.getElementById('task-view-overlay');
+    function showTaskView(url, duration, button) { if (taskTimerInterval) clearInterval(taskTimerInterval); currentTaskButton = button; document.getElementById('task-timer-wrapper').style.display = 'block'; document.getElementById('task-continue-btn').style.display = 'none'; document.getElementById('task-iframe').src = url; document.getElementById('open-browser-btn').href = url; taskOverlay.style.display = 'flex'; let timeLeft = duration; document.getElementById('task-timer').textContent = `${timeLeft}s`; taskTimerInterval = setInterval(() => { timeLeft--; document.getElementById('task-timer').textContent = `${timeLeft}s`; if (timeLeft <= 0) { clearInterval(taskTimerInterval); document.getElementById('task-timer-wrapper').style.display = 'none'; document.getElementById('task-continue-btn').style.display = 'block'; } }, 1000); }
+    function hideTaskView(isSuccess) { if (taskTimerInterval) clearInterval(taskTimerInterval); if (isSuccess && currentTaskButton) { completeTask(currentTaskButton); } currentTaskButton = null; document.getElementById('task-iframe').src = 'about:blank'; taskOverlay.style.display = 'none'; }
+    document.getElementById('task-back-btn').addEventListener('click', () => { if (confirm('Are you sure you want to cancel this task?')) { hideTaskView(false); } });
+    document.getElementById('task-continue-btn').addEventListener('click', () => hideTaskView(true));
+    
+    // --- UPDATED Event Listeners with requireLogin() ---
+    document.getElementById('spin-btn').addEventListener('click', () => requireLogin(() => showModal('Spin Wheel', '<p>The lucky spin wheel is coming soon! Get ready for exciting prizes.</p>')));
+    document.getElementById('notify-btn').addEventListener('click', () => requireLogin(() => showModal('Notifications', '<p>No new notifications at this time.</p>')));
+    document.getElementById('login-btn').addEventListener('click', () => requireLogin(initializeAndShowRewards));
+    document.querySelectorAll('.deposit, .withdraw').forEach(btn => btn.addEventListener('click', () => requireLogin(() => alert(`'${btn.textContent.trim()}' button clicked!`))));
+    document.getElementById('customer-service-link').addEventListener('click', (e) => { e.preventDefault(); requireLogin(showCustomerService); });
+    document.querySelectorAll('#task-list-container-fiture .go-btn').forEach(btn => btn.addEventListener('click', function() { requireLogin(() => showTaskView(this.dataset.url, parseInt(this.dataset.duration, 10), this)); }));
+
+
+    // --- Customer Service Overlay Logic (Unchanged but wrapped) ---
+    const csOverlay = document.getElementById('customer-service-overlay');
+    const bottomNav = document.querySelector('.bottom-nav');
+    function showCustomerService() {
+        if (!csChatInitialized) { initializeCustomerServiceChat(); }
+        csOverlay.classList.add('visible');
+        bottomNav.style.visibility = 'hidden';
+    }
+    function hideCustomerService() {
+        csOverlay.classList.remove('visible');
+        bottomNav.style.visibility = 'visible';
+    }
+    document.getElementById('cs-back-to-profile').addEventListener('click', (e) => { e.preventDefault(); hideCustomerService(); });
+
+    // --- Fiture Page Logic (Unchanged but wrapped) ---
+    function initializeFiturePage() { startTaskCountdown(); totalTasks = document.querySelectorAll('#task-list-container-fiture .go-btn').length; updateFitureStats(); }
+    function updateFitureStats() { document.getElementById('fiture-current-position').textContent = userData.vipPosition; document.getElementById('fiture-today-earn').textContent = `${userData.todayEarning.toFixed(2)} BDT`; document.getElementById('fiture-task-complete').textContent = `${completedTasks} / ${totalTasks}`; document.getElementById('fiture-task-remain').textContent = totalTasks - completedTasks; }
+    function completeTask(button) { if (button.classList.contains('completed')) return; const reward = parseFloat(button.dataset.reward); userData.todayEarning += reward; userData.balance += reward; completedTasks++; button.classList.add('completed'); button.textContent = 'Completed'; button.disabled = true; updateFitureStats(); updateHomePage(); updateProfilePage(); }
+    
+    // --- VIP Page Logic (Unchanged but wrapped) ---
+    const vipLevels = [ { level: 1, name: 'Intern', price: 0, daily: 50, monthly: 150, yearly: null, tasks: 5, perTask: 10, autoPayment: false, validityDays: 3 }, { level: 2, name: 'Staff', price: 1500, daily: 60, monthly: 1800, yearly: 21900, tasks: 6, perTask: 10, autoPayment: false, validityDays: 365 }, { level: 3, name: 'Executive', price: 5000, daily: 200, monthly: 6000, yearly: 73000, tasks: 10, perTask: 20, autoPayment: false, validityDays: 365 }, { level: 4, name: 'Manager', price: 15000, daily: 600, monthly: 18000, yearly: 219000, tasks: 20, perTask: 30, autoPayment: false, validityDays: 365 }, { level: 5, name: 'Director', price: 50000, daily: 2000, monthly: 60000, yearly: 730000, tasks: null, perTask: null, autoPayment: true, validityDays: 365 }, { level: 6, name: 'CEO', price: 150000, daily: 6000, monthly: 180000, yearly: 2190000, tasks: null, perTask: null, autoPayment: true, validityDays: 365 }, { level: 7, name: 'Chairman', price: 500000, daily: 20000, monthly: 600000, yearly: 7300000, tasks: null, perTask: null, autoPayment: true, validityDays: 365 } ];
+    const initializeVipPage = () => {
+        const container = document.getElementById('vip-list-container'); if (!container) return;
+        const f = (n) => n === null ? '–' : `৳${n.toLocaleString('en-IN')}`;
+        container.innerHTML = vipLevels.map(vip => {
+            const isCurrent = isLoggedIn && userData.vipPosition === vip.name;
+            const validityText = vip.validityDays === 365 ? '1 Year' : `${vip.validityDays} Days`;
+            return `
+                <div class="vip-card ${isCurrent ? 'active' : ''}">
+                    <div class="vip-card-header"><h3>${vip.name}</h3><span class="price">${f(vip.price)}</span></div>
+                    <div class="vip-card-body"><div class="vip-stat"><p>Daily</p><strong>${f(vip.daily)}</strong></div><div class="vip-stat"><p>Monthly</p><strong>${f(vip.monthly)}</strong></div><div class="vip-stat"><p>Yearly</p><strong>${f(vip.yearly)}</strong></div><div class="vip-stat"><p>Tasks/Day</p><strong>${vip.tasks ?? '–'}</strong></div><div class="vip-stat"><p>Per Task</p><strong>${f(vip.perTask)}</strong></div><div class="vip-stat"><p>Auto Pay</p><strong>${vip.autoPayment ? '<i class="fas fa-check-circle icon-success"></i>' : '<i class="fas fa-times-circle icon-danger"></i>'}</strong></div><div class="vip-stat"><p>Validity</p><strong>${validityText}</strong></div></div>
+                    <div class="vip-card-footer"><button class="${isCurrent ? 'buy-btn current' : 'buy-btn'}" data-name="${vip.name}" data-price="${vip.price}" ${isCurrent ? 'disabled' : ''}>${isCurrent ? 'Current Plan' : 'Upgrade Now'}</button></div>
+                </div>`;
+        }).join('');
+        container.querySelectorAll('.buy-btn:not(.current)').forEach(btn => btn.addEventListener('click', () => requireLogin(() => alert(`Upgrade to ${btn.dataset.name} for ৳${parseInt(btn.dataset.price).toLocaleString('en-IN')}`))));
+    };
+
+    // --- Daily Login Modal Logic (Unchanged but wrapped) ---
+    const rewardsModalOverlay = document.getElementById('rewardsModalOverlay');
+    const closeRewardsModalBtn = document.getElementById('closeRewardsModalBtn');
+    const daysRow1Modal = document.getElementById('daysRow1Modal');
+    const daysRow2Modal = document.getElementById('daysRow2Modal');
+    const totalRewardsModalDisplay = document.getElementById('totalRewardsModal');
+    const streakInfoModalDisplay = document.getElementById('streakInfoModal');
+    const statusMessageModalDisplay = document.getElementById('statusMessageModal');
+    const countdownTimerModalDisplay = document.getElementById('countdownTimerModal');
+    const REWARDS = [5, 10, 15, 20, 25, 30, 35];
+    const MAX_DAYS = REWARDS.length;
+    let countdownIntervalModal = null;
+    let dailyLoginData = { lastLoginDate: null, consecutiveDays: 0, claimedToday: false, totalEarned: 0, rewardsClaimedThisCycle: Array(MAX_DAYS).fill(false) };
+    function loadDailyLoginData() { const storedData = localStorage.getItem('dailyLoginUserData_v4_themed'); if (storedData) { dailyLoginData = JSON.parse(storedData); if (!Array.isArray(dailyLoginData.rewardsClaimedThisCycle) || dailyLoginData.rewardsClaimedThisCycle.length !== MAX_DAYS) { dailyLoginData.rewardsClaimedThisCycle = Array(MAX_DAYS).fill(false); } } }
+    function saveDailyLoginData() { localStorage.setItem('dailyLoginUserData_v4_themed', JSON.stringify(dailyLoginData)); }
+    function getTodayDateString() { const today = new Date(); return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; }
+    function isYesterday(lastDateStr, currentDateStr) { if (!lastDateStr) return false; const lastDate = new Date(lastDateStr); const currentDate = new Date(currentDateStr); const expectedYesterday = new Date(currentDate); expectedYesterday.setDate(currentDate.getDate() - 1); return lastDate.getFullYear() === expectedYesterday.getFullYear() && lastDate.getMonth() === expectedYesterday.getMonth() && lastDate.getDate() === expectedYesterday.getDate(); }
+    function updateStatusMessage(message, type = 'info') { statusMessageModalDisplay.textContent = message; statusMessageModalDisplay.className = `status-message-modal ${type}`; statusMessageModalDisplay.style.display = 'block'; setTimeout(() => { if (statusMessageModalDisplay.textContent === message) { statusMessageModalDisplay.style.display = 'none'; } }, 2500); }
+    function updateCountdownTimer() { let targetDate = new Date(); targetDate.setDate(targetDate.getDate() + 1); targetDate.setHours(0, 0, 0, 0); const distance = targetDate.getTime() - new Date().getTime(); if (distance < 0) { countdownTimerModalDisplay.textContent = "Next reward is ready!"; countdownTimerModalDisplay.classList.add('ready'); if (countdownIntervalModal) clearInterval(countdownIntervalModal); return; } countdownTimerModalDisplay.classList.remove('ready'); const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); const s = Math.floor((distance % (1000 * 60)) / 1000); countdownTimerModalDisplay.textContent = `Next Reward: ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; }
+    function initializeAndShowRewards() { loadDailyLoginData(); const todayStr = getTodayDateString(); if (dailyLoginData.lastLoginDate !== todayStr) { if (isYesterday(dailyLoginData.lastLoginDate, todayStr)) { dailyLoginData.consecutiveDays++; if (dailyLoginData.consecutiveDays > MAX_DAYS) { dailyLoginData.consecutiveDays = 1; dailyLoginData.rewardsClaimedThisCycle.fill(false); } } else { dailyLoginData.consecutiveDays = 1; dailyLoginData.rewardsClaimedThisCycle.fill(false); } dailyLoginData.claimedToday = false; dailyLoginData.lastLoginDate = todayStr; } saveDailyLoginData(); renderDaysModal(); updateStreakInfoModal(); updateTotalRewardsModalDisplay(); if (countdownIntervalModal) clearInterval(countdownIntervalModal); updateCountdownTimer(); countdownIntervalModal = setInterval(updateCountdownTimer, 1000); rewardsModalOverlay.style.display = 'flex'; }
+    function renderDaysModal() { daysRow1Modal.innerHTML = ''; daysRow2Modal.innerHTML = ''; for (let i = 0; i < MAX_DAYS; i++) { const dayIndex = i; const dayNumber = i + 1; const dayCard = document.createElement('div'); dayCard.classList.add('day-card'); const dayNumEl = document.createElement('div'); dayNumEl.classList.add('day-number'); dayNumEl.textContent = `Day ${dayNumber}`; const rewardEl = document.createElement('div'); rewardEl.classList.add('reward-amount'); rewardEl.textContent = REWARDS[dayIndex]; const claimButton = document.createElement('button'); claimButton.dataset.day = dayIndex; if (dailyLoginData.rewardsClaimedThisCycle[dayIndex]) { dayCard.classList.add('claimed'); claimButton.textContent = 'Claimed'; claimButton.disabled = true; } else if (dayNumber === dailyLoginData.consecutiveDays) { dayCard.classList.add('active'); claimButton.textContent = 'Claim'; if (dailyLoginData.claimedToday) { dayCard.classList.add('claimed'); claimButton.textContent = 'Claimed Today'; claimButton.disabled = true; } } else {  dayCard.classList.add('locked'); claimButton.textContent = 'Locked'; claimButton.disabled = true; if (dayNumber < dailyLoginData.consecutiveDays && !dailyLoginData.rewardsClaimedThisCycle[dayIndex]){ claimButton.textContent = 'Missed'; } } claimButton.addEventListener('click', handleClaimModal); dayCard.appendChild(dayNumEl); dayCard.appendChild(rewardEl); dayCard.appendChild(claimButton); if (dayNumber <= 3) { daysRow1Modal.appendChild(dayCard); } else { daysRow2Modal.appendChild(dayCard); } } }
+    function handleClaimModal(event) { const dayIndexToClaim = parseInt(event.target.dataset.day); if (dayIndexToClaim === (dailyLoginData.consecutiveDays - 1) && !dailyLoginData.claimedToday) { const rewardAmount = REWARDS[dayIndexToClaim]; dailyLoginData.totalEarned += rewardAmount; userData.balance += rewardAmount; dailyLoginData.claimedToday = true; dailyLoginData.rewardsClaimedThisCycle[dayIndexToClaim] = true; updateStatusMessage(`You received ৳${rewardAmount}!`, 'success'); saveDailyLoginData(); renderDaysModal(); updateTotalRewardsModalDisplay(); updateProfilePage(); } else if (dailyLoginData.claimedToday && dayIndexToClaim === (dailyLoginData.consecutiveDays - 1)) { updateStatusMessage("You have already claimed today's reward.", 'info'); } else { updateStatusMessage("This reward is not available to claim yet.", 'error'); } }
+    function updateStreakInfoModal() { streakInfoModalDisplay.textContent = `Login Streak: Day ${dailyLoginData.consecutiveDays}`; }
+    function updateTotalRewardsModalDisplay() { totalRewardsModalDisplay.textContent = dailyLoginData.totalEarned; }
+    closeRewardsModalBtn.addEventListener('click', () => { rewardsModalOverlay.style.display = 'none'; if (countdownIntervalModal) clearInterval(countdownIntervalModal); });
+    rewardsModalOverlay.addEventListener('click', (event) => { if (event.target === rewardsModalOverlay) { rewardsModalOverlay.style.display = 'none'; if (countdownIntervalModal) clearInterval(countdownIntervalModal); } });
+
+    // --- Customer Service Chat Initialization (On-Demand and unchanged) ---
+    function initializeCustomerServiceChat() { if (csChatInitialized) return; const chatMessages = csOverlay.querySelector('#cs-chatMessages'); const userInput = csOverlay.querySelector('#cs-userInput'); const sendButton = csOverlay.querySelector('#cs-sendButton'); const serviceStatusTextEl = csOverlay.querySelector('#cs-serviceStatusText'); const serviceCountdownTimerEl = csOverlay.querySelector('#cs-serviceCountdownTimer'); const KNOWLEDGE_BASE = [{keywords: ["withdraw", "payment", "money"],answer: "You can withdraw money from your profile page. Withdrawals are processed from 10:00 AM to 4:00 PM on working days (Sunday-Thursday)."},{keywords: ["vip", "upgrade", "plan", "price"],answer: "You can see all available VIP plans and their benefits on the VIP page. Tap on the VIP icon in the bottom menu to learn more."},{keywords: ["task", "work", "earning", "earn"],answer: "To earn, go to the 'Fiture' page from the bottom menu. You will see a list of available tasks. Click 'GO' to start a task."},{keywords: ["refer", "friend", "invite", "commission"],answer: "Go to the 'Refer' page to find your invitation code and link. You can earn commissions when your referred friends upgrade their VIP level."}, {keywords: ["problem", "issue", "help", "support"], answer: "Please describe your issue in detail. If it's about a specific transaction, please provide the transaction ID and time."}]; const GENERIC_ANSWERS = ["Could you please rephrase that?", "I'm sorry, I don't have information about that. Please ask another question.", "Our support team is available from 9 AM to 5 PM, Sunday to Thursday. Please be patient.", "Thank you for your question. Let me check that for you."]; const SERVICE_START_HOUR = 9; const SERVICE_END_HOUR = 17; const SERVICE_OFF_DAYS = [5, 6]; let serviceStatusIntervalId = null; function addMessage(htmlContent, type) { const messageDiv = document.createElement('div'); messageDiv.classList.add('message', type); messageDiv.innerHTML = htmlContent; chatMessages.appendChild(messageDiv); chatMessages.scrollTop = chatMessages.scrollHeight; } function getSmartResponse(userQuestion) { const lowerCaseQuestion = userQuestion.toLowerCase(); let bestMatch = null; let highestScore = 0; KNOWLEDGE_BASE.forEach(kbItem => { let currentScore = 0; kbItem.keywords.forEach(keyword => { if (lowerCaseQuestion.includes(keyword)) { currentScore++; } }); if (currentScore > highestScore) { highestScore = currentScore; bestMatch = kbItem.answer; } }); return (bestMatch && highestScore > 0) ? bestMatch : GENERIC_ANSWERS[Math.floor(Math.random() * GENERIC_ANSWERS.length)]; } function handleSend() { const userText = userInput.value.trim(); if (userText === "" || userInput.disabled) return; addMessage(userText, 'user'); userInput.value = ""; userInput.disabled = true; sendButton.disabled = true; setTimeout(() => { const supportResponse = getSmartResponse(userText); addMessage(supportResponse, 'support'); userInput.disabled = false; sendButton.disabled = false; userInput.focus(); }, 800 + Math.random() * 700); } function formatCountdownTime(totalSeconds) { if (totalSeconds < 0) totalSeconds = 0; const d = Math.floor(totalSeconds / (3600 * 24)); const h = Math.floor(totalSeconds % (3600 * 24) / 3600); const m = Math.floor(totalSeconds % 3600 / 60); const s = Math.floor(totalSeconds % 60); let parts = []; if (d > 0) parts.push(`${d}d`); if (h > 0 || d > 0) parts.push(`${String(h).padStart(d > 0 ? 2 : 1, '0')}h`); parts.push(`${String(m).padStart(2, '0')}m`); parts.push(`${String(s).padStart(2, '0')}s`); return parts.join(' '); } function isServiceCurrentlyAvailable() { const now = new Date(); const currentDay = now.getDay(); const currentHour = now.getHours(); if (SERVICE_OFF_DAYS.includes(currentDay)) return false; return currentHour >= SERVICE_START_HOUR && currentHour < SERVICE_END_HOUR; } function updateServiceStatusAndChat() { const now = new Date(); const available = isServiceCurrentlyAvailable(); let countdownSeconds = 0; let countdownMessagePrefix = ""; if (available) { serviceStatusTextEl.innerHTML = 'Status: <span class="status-online">Online</span>'; countdownMessagePrefix = "Offline in: "; const endServiceTimeToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SERVICE_END_HOUR, 0, 0); countdownSeconds = Math.floor((endServiceTimeToday.getTime() - now.getTime()) / 1000); } else { serviceStatusTextEl.innerHTML = 'Status: <span class="status-offline">Offline</span>'; countdownMessagePrefix = "Back in: "; let nextServiceDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), SERVICE_START_HOUR, 0, 0); if (now.getHours() >= SERVICE_END_HOUR || SERVICE_OFF_DAYS.includes(now.getDay())) { nextServiceDay.setDate(nextServiceDay.getDate() + 1); } while (SERVICE_OFF_DAYS.includes(nextServiceDay.getDay())) { nextServiceDay.setDate(nextServiceDay.getDate() + 1); } countdownSeconds = Math.floor((nextServiceDay.getTime() - now.getTime()) / 1000); } serviceCountdownTimerEl.textContent = countdownMessagePrefix + formatCountdownTime(countdownSeconds); userInput.disabled = !available; sendButton.disabled = !available; userInput.placeholder = available ? "Ask about Moneylife..." : "Service is currently offline."; } sendButton.addEventListener('click', handleSend); userInput.addEventListener('keypress', (event) => { if (event.key === 'Enter') handleSend(); }); updateServiceStatusAndChat(); if (serviceStatusIntervalId) clearInterval(serviceStatusIntervalId); serviceStatusIntervalId = setInterval(updateServiceStatusAndChat, 1000); if (chatMessages.children.length === 0) { if (isServiceCurrentlyAvailable()) { addMessage("Hello! I'm the MNLF virtual assistant. How can I help you today?", 'support'); } else { addMessage("Our live support is currently offline. We are available from Sunday to Thursday, 9 AM to 5 PM. We'll be back soon!", 'support'); } } csChatInitialized = true; }
+
+    // --- Other Page Logic & Initializations (Unchanged) ---
+    const startTaskCountdown = () => { if (taskCountdownInterval) clearInterval(taskCountdownInterval); const countdownDuration = (4 * 3600 + 48 * 60 + 37) * 1000; const targetTimestamp = new Date().getTime() + countdownDuration; taskCountdownInterval = setInterval(() => { const distance = targetTimestamp - new Date().getTime(); const el = document.getElementById('task-countdown'); if (!el) { clearInterval(taskCountdownInterval); return; } if (distance < 0) { clearInterval(taskCountdownInterval); el.innerText = "Ready!"; return; } const h = String(Math.floor((distance % 864e5) / 36e5)).padStart(2, '0'); const m = String(Math.floor((distance % 36e5) / 6e4)).padStart(2, '0'); const s = String(Math.floor((distance % 6e4) / 1e3)).padStart(2, '0'); el.innerText = `${h}h ${m}m ${s}s`; }, 1000); };
+    const updateHomePage = () => { if (userData.vipPosition.toLowerCase() === "intern" || !isLoggedIn) { document.getElementById('vip-dashboard').style.display = 'none'; document.getElementById('intern-card').style.display = 'block'; if (vipCountdownInterval) clearInterval(vipCountdownInterval); } else { document.getElementById('vip-dashboard').style.display = 'block'; document.getElementById('intern-card').style.display = 'none'; updateVipDashboard(); startVipCountdown(); } };
+    const updateVipDashboard = () => { document.getElementById('home-vip-position').innerText = userData.vipPosition; document.getElementById('home-vip-expires').innerText = `Expires in ${userData.vipExpiresDays} days`; document.getElementById('home-today-earning').innerText = userData.todayEarning.toFixed(2); document.getElementById('home-yesterday-earning').innerText = userData.yesterdayEarning.toFixed(2); document.getElementById('home-weekly-earning').innerText = userData.weeklyEarning.toFixed(2); document.getElementById('home-monthly-earning').innerText = userData.monthlyEarning.toFixed(2); document.getElementById('home-team-earning').innerText = userData.teamEarning.toFixed(2); document.getElementById('home-team-reffer').innerText = userData.teamReffer; };
+    const startVipCountdown = () => { if (vipCountdownInterval) clearInterval(vipCountdownInterval); vipCountdownInterval = setInterval(() => { const distance = vipExpirationTimestamp - new Date().getTime(); if (distance < 0) { clearInterval(vipCountdownInterval); document.getElementById('vip-countdown').innerText = "Expired"; return; } const d = Math.floor(distance / 864e5), h = Math.floor((distance % 864e5) / 36e5), m = Math.floor((distance % 36e5) / 6e4), s = Math.floor((distance % 6e4) / 1e3); document.getElementById('vip-countdown').innerText = `${d}d ${h}h ${m}m ${s}s`; }, 1000); };
+    const initializeHomePageContent = () => { const imageTrack = document.getElementById('image-slider-track'); let imageHTML = ''; sliderImages.forEach(src => { imageHTML += `<img src="${src}" alt="slider image">`; }); imageTrack.innerHTML = imageHTML + imageHTML; const earningList = document.getElementById('earning-list'); let earningHTML = ''; membershipEarnings.forEach(e => { earningHTML += `<div class="earning-item"><div class="avatar"><img src="${e.avatar}" alt="avatar"></div><div class="details"><div class="name">Congrats ${e.phone}</div><div class="label">today earning</div></div><span class="amount">${e.amount.toLocaleString()} BDT</span></div>`; }); earningList.innerHTML = earningHTML + earningHTML; };
+    const updateProfilePage = () => { document.getElementById('profile-phone').innerText = userData.phone; document.getElementById('profile-invite-code').innerText = userData.inviteCode; document.getElementById('profile-vip-level').innerText = userData.vipPosition; document.getElementById('profile-balance').innerText = userData.balance.toFixed(2); };
+    const initializeReferPage = () => { const incomeData=[{p:'Intern',d:0,di:50},{p:'Staff',d:1500,di:60},{p:'Excutive',d:5000,di:200},{p:'Manager',d:15000,di:600},{p:'Director',d:50000,di:2000},{p:'Ceo',d:150000,di:6000},{p:'Chairman',d:500000,di:20000}]; const commissionData=[{p:'Staff',pr:60,la:5,lb:3},{p:'Excutive',pr:200,la:5,lb:3},{p:'Manager',pr:600,la:5,lb:3},{p:'Director',pr:2000,la:5,lb:3},{p:'Ceo',pr:6000,la:5,lb:3},{p:'Chairman',pr:20000,la:5,lb:3}]; const subordinateTaskData=[{l:'Intern',a:5,b:3,c:0},{l:'Staff',a:150,b:75,c:1500},{l:'Excutive',a:500,b:250,c:5000},{l:'Manager',a:1500,b:750,c:15000},{l:'Director',a:5000,b:2500,c:50000},{l:'Ceo',a:15000,b:7500,c:150000},{l:'Chairman',a:50000,b:25000,c:500000}]; const teamA_Data=[{v:'Ceo',n:'017***123',e:6000},{v:'Staff',n:'019***456',e:60},{v:'Manager',n:'018***789',e:600},{v:'Excutive',n:'013***555',e:200}]; const teamB_Data=[{v:'Excutive',n:'016***111',e:200},{v:'Staff',n:'015***222',e:60}]; const f = (n) => n.toLocaleString('en-IN'); document.getElementById('income-table-body').innerHTML = incomeData.map(i=>`<tr><td>${i.p}</td><td class="text-right">${f(i.d)}</td><td class="text-right">${f(i.di)}</td></tr>`).join(''); document.getElementById('team-commission-tbody').innerHTML = commissionData.map(i=>`<tr><td>${i.p}</td><td class="text-right">${f(i.pr)}</td><td class="text-center">${i.la}%</td><td class="text-center">${i.lb}%</td><td class="text-right reward-amount">${f(i.pr*i.la/100)}</td><td class="text-right reward-amount">${f(i.pr*i.lb/100)}</td></tr>`).join(''); document.getElementById('subordinate-commission-tbody').innerHTML = subordinateTaskData.map(i=>`<tr><td>${i.l}</td><td class="text-center">10%5%</td><td class="text-right">${f(i.a)}</td><td class="text-right">${f(i.b)}</td><td class="text-right">${f(i.c)}</td></tr>`).join(''); const createTeamTableRows = (data) => data.map(m=>`<tr><td>${m.v}</td><td>${m.n}</td><td class="text-right">৳ ${f(m.e)}</td></tr>`).join(''); document.getElementById('level-a-table-body').innerHTML = createTeamTableRows(teamA_Data); document.getElementById('level-b-table-body').innerHTML = createTeamTableRows(teamB_Data); const all = (q, fn) => document.querySelectorAll(q).forEach(fn); all('#refer-page .tab-button',b=>b.addEventListener('click',()=>{all('#refer-page .tab-button',x=>x.classList.remove('active'));all('#refer-page .content-section',x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active')})); all('#refer-page .sub-tab-button',b=>b.addEventListener('click',()=>{all('#refer-page .sub-tab-button',x=>x.classList.remove('active'));all('#refer-page .sub-content-section',x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.subtab).classList.add('active')})); all('#refer-page .accordion-button',b=>b.addEventListener('click',()=>{b.classList.toggle('active');const p=b.nextElementSibling;p.style.maxHeight=p.style.maxHeight?null:p.scrollHeight+"px"})); function copyHandler(button, textToCopy) { navigator.clipboard.writeText(textToCopy).then(() => { button.textContent = 'Copied!'; button.classList.add('copied'); setTimeout(() => { button.textContent = 'Copy'; button.classList.remove('copied'); }, 1500); }); } document.getElementById('copy-code-btn').addEventListener('click', e => copyHandler(e.target, document.getElementById('referral-code').textContent)); document.getElementById('copy-link-btn').addEventListener('click', e => copyHandler(e.target, document.getElementById('referral-link-input').value)); };
+    
+    document.getElementById('about-btn').addEventListener('click', () => alert('Company Information will be displayed here.'));
+    document.getElementById('logout-btn').addEventListener('click', () => { if (confirm('Are you sure you want to logout?')) { isLoggedIn = false; alert('You have been logged out.'); window.location.reload(); } });
+    document.getElementById('help-btn').addEventListener('click', () => requireLogin(() => alert('Help center is coming soon!')));
+    document.getElementById('lottary-btn').addEventListener('click', () => requireLogin(() => alert('Lottary Ticket feature is coming soon!')));
+    document.getElementById('investment-btn').addEventListener('click', () => requireLogin(() => alert('Investment plans will be available soon!')));
+    document.getElementById('telegram-btn').addEventListener('click', () => alert('Join our Telegram channel! Link will be provided here.'));
+
+    // --- Initial Call ---
+    navigateTo('home-page');
+    initializeHomePageContent();
+    initializeReferPage();
+    initializeVipPage();
+    loadDailyLoginData(); 
+});
+</script>
+
+</body>
+</html>
